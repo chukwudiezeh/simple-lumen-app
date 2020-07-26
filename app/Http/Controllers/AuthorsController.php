@@ -20,24 +20,38 @@ class AuthorsController extends Controller
     public function index() {
         $authors = Author::all();
 
-        return response()->json($authors, 200);
+        return response()->json(['data' => $authors], 200);
     }
     //show one author
     public function show($id) {
         $author = Author::findorfail($id);
 
-        return response()->json($author, 200);
+        return response()->json(['data' => $author], 200);
     }
     //create
     public function create(Request $request) {
-        
+        $author = Author::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'area_of_interest' => $request->aoi,
+        ]);
+
+        return response()->json(['data' => $author, 'message' => 'Author Added successfully'], 201);
     }
     //update an author
-    public function update() {
+    public function update(Request $request, $id) {
+        $author = Author::findorfail($id);
 
+        $author->update($request->all());
+        
+        return response()->json(['data' => $author, 'message' => 'Update Successful'], 201);
     }
     //delete an author
-    public function delete() {
+    public function delete($id) {
+        $author = Author::findorfail($id);
 
+        $author->delete();
+
+        return response()->json(['message' => 'author deleted successfully']);
     }
 }

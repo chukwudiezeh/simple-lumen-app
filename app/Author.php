@@ -30,4 +30,8 @@ class Author extends Model implements AuthenticatableContract, AuthorizableContr
     protected $hidden = [
         'password',
     ];
+
+    public function book() {
+        return $this->hasMany(Book::class);
+    }
 }
