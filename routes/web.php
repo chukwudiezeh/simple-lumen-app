@@ -24,8 +24,22 @@ $router->group(['prefix' => 'api/v1'], function() use ($router) {
         $router->get('', 'AuthorsController@index');//all authors
         $router->get('{id}', 'AuthorsController@show');//show one author
         $router->post('create', 'AuthorsController@create');//create
-        $router->put('update/{id}', 'AuthorController@update');//update an author
-        $router->delete('delete/{id}', 'AuthorController@delete');//delete an author
+        $router->put('update/{id}', 'AuthorsController@update');//update an author
+        $router->delete('delete/{id}', 'AuthorsController@delete');//delete an author
+
+        $router->get('{id}/books', 'AuthorsController@author_books');
+
+    });
+
+    $router->group(['prefix' => 'books'], function() use ($router){
+
+        $router->get('', 'BooksController@index');//all books
+        $router->get('{id}', 'BooksController@show');//show one book
+        $router->post('create', 'BooksController@create');//add book
+        $router->put('update/{id}', 'BooksController@update');//update a book
+        $router->delete('delete/{id}', 'BooksController@delete');//delete a book
+
+        $router->get('{id}/author', 'BooksController@book_authors');
 
     });
 

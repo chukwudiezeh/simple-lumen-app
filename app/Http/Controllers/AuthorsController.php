@@ -54,4 +54,12 @@ class AuthorsController extends Controller
 
         return response()->json(['message' => 'author deleted successfully']);
     }
+
+    public function author_books($id){
+        $author = Author::findorfail($id);
+
+        $author_books = $author->books;
+
+        return response()->json(['data' => $author_books], 200);
+    }
 }
