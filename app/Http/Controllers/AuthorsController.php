@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Http\Request;
 
 use App\Author;
 
@@ -20,23 +21,35 @@ class AuthorsController extends Controller
     public function index() {
         $authors = Author::all();
 
-        return response()->json(['data' => $authors], 200);
+        /**Checks if any author has been added 
+         * and 
+         * returns the appropriate response
+        */
+        if ($authors->isEmpty()){
+            $data = ['message' => 'No authors added Yet! Lets add some authors.'];
+            return response()->json(['data'=>$data],200);
+        }else{
+            return response()->json(['data' => $authors], 200);
+        }
+
     }
+
     //show one author
     public function show($id) {
         $author = Author::findorfail($id);
 
         return response()->json(['data' => $author], 200);
     }
+
     //create
     public function create(Request $request) {
         $author = Author::create([
             'name' => $request->name,
             'email' => $request->email,
-            'area_of_interest' => $request->aoi,
+            'area_of_interest' => $request->aoi
         ]);
 
-        return response()->json(['data' => $author, 'message' => 'Author Added successfully'], 201);
+        return response()->json(['data' => [$author, 'message' => 'Author Added successfully']], 201);
     }
     //update an author
     public function update(Request $request, $id) {
