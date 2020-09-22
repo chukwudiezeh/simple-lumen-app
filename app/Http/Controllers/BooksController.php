@@ -18,17 +18,37 @@ class BooksController extends Controller
 
 
     //all books
-    public function index(){
+    public function index()
+    {
         $books = Book::all();
 
-        return response()->json(['data' => $books], 200);
+        //Check if any book has been added and returns the appropriate response
+        if($books->isEmpty())
+        {
+            $data = ['message' => 'No books added Yet! Lets add some books.'];
+            return response()->json(['data'=>$data],404);
+        }
+        else
+        {
+            return response()->json(['data' => $books], 200);
+        }
     }
 
     //show one book
-    public function show($id){
-        $book = Book::findorfail($id);
-
+    public function show($id)
+    {
+        $book = Book::find($id);
+        if ($book !== null)
+        {
         return response()->json(['data' => $book], 200);
+
+        }
+        else
+        {
+            $data = ['message' => 'This book does not exist in our database.'];
+            return response()->json(['data'=>$data],404);
+        }
+
     }
 
     //add book
@@ -45,7 +65,7 @@ class BooksController extends Controller
     
     //update one book
     public function update(Request $request, $id){
-        $book = Book::findorfail($id);
+        $book = Book::find($id);
         
         $book->update($request->all());
 
@@ -54,7 +74,7 @@ class BooksController extends Controller
     
     //delete one book
     public function delete($id){
-        $book = Book::findorfail($id);
+        $book = Book::find($id);
 
         $book->delete();
 
@@ -62,7 +82,7 @@ class BooksController extends Controller
     }
 
     public function book_author($id){
-        $book = Book::findorfail($id);
+        $book = Book::find($id);
 
         $book_author = $book->author;
 

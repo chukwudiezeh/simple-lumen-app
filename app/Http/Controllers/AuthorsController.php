@@ -17,15 +17,13 @@ class AuthorsController extends Controller
         //
     }
 
+    
     //all authors
     public function index() 
     {
         $authors = Author::all();
 
-        /**Checks if any author has been added 
-         * and 
-         * returns the appropriate response
-        */
+        //Check if any author has been added and returns the appropriate response
         if ($authors->isEmpty())
         {
             $data = ['message' => 'No authors added Yet! Lets add some authors.'];
@@ -41,21 +39,21 @@ class AuthorsController extends Controller
     public function show($author) 
     {
         $author = Author::find($author);
-
-        if ($author->exists())
+        if ($author !== null)
         {
             return response()->json(['data' => $author], 200);
         }
         else
         {
-            $data = ['message' => 'No authors added Yet! Lets add some authors.'];
+            $data = ['message' => 'This author does not exist in our database.'];
             return response()->json(['data'=>$data],404);
         }
 
     }
 
     //create
-    public function create(Request $request) {
+    public function create(Request $request) 
+    {
         $author = Author::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -64,25 +62,30 @@ class AuthorsController extends Controller
         return response()->json(['data' => [$author, 'message' => 'Author Added successfully']], 201);
     }
 
+    
     //update an author
-    public function update(Request $request, $id) {
-        $author = Author::findorfail($id);
+    public function update(Request $request, $author) 
+    {
+        $authorr = Author::find($author);
 
-        $author->update($request->all());
+        $authorr->update($request->all());
         
-        return response()->json(['data' => $author, 'message' => 'Update Successful'], 201);
+        return response()->json(['data' => $authorr, 'message' => 'Update Successful'], 201);
     }
-    //delete an author
-    public function delete($id) {
-        $author = Author::findorfail($id);
 
-        $author->delete();
+
+    //delete an author
+    public function delete($author) 
+    {
+        $authorr = Author::find($author);
+
+        $authorr->delete();
 
         return response()->json(['message' => 'author deleted successfully']);
     }
 
     public function author_books($id){
-        $author = Author::findorfail($id);
+        $author = Author::find($id);
 
         $author_books = $author->books;
 
