@@ -22,9 +22,9 @@ $router->group(['prefix' => 'api/v1'], function() use ($router) {
     $router->group(['prefix' => 'authors'], function() use ($router){
 
         $router->get('', 'AuthorsController@index');//all authors
-        $router->get('{id}', 'AuthorsController@show');//show one author
+        $router->get('{author}', 'AuthorsController@show');//show one author
         $router->post('create', 'AuthorsController@create');//create
-        $router->put('update/{id}', 'AuthorsController@update');//update an author
+        $router->put('update/{author}', 'AuthorsController@update');//update an author
         $router->delete('delete/{id}', 'AuthorsController@delete');//delete an author
 
         $router->get('{id}/books', 'AuthorsController@author_books');

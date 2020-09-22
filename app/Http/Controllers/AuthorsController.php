@@ -18,27 +18,40 @@ class AuthorsController extends Controller
     }
 
     //all authors
-    public function index() {
+    public function index() 
+    {
         $authors = Author::all();
 
         /**Checks if any author has been added 
          * and 
          * returns the appropriate response
         */
-        if ($authors->isEmpty()){
+        if ($authors->isEmpty())
+        {
             $data = ['message' => 'No authors added Yet! Lets add some authors.'];
-            return response()->json(['data'=>$data],200);
-        }else{
+            return response()->json(['data'=>$data],404);
+        }
+        else{
             return response()->json(['data' => $authors], 200);
         }
 
     }
 
     //show one author
-    public function show($id) {
-        $author = Author::findorfail($id);
+    public function show($author) 
+    {
+        $author = Author::find($author);
 
-        return response()->json(['data' => $author], 200);
+        if ($author->exists())
+        {
+            return response()->json(['data' => $author], 200);
+        }
+        else
+        {
+            $data = ['message' => 'No authors added Yet! Lets add some authors.'];
+            return response()->json(['data'=>$data],404);
+        }
+
     }
 
     //create
@@ -48,9 +61,9 @@ class AuthorsController extends Controller
             'email' => $request->email,
             'area_of_interest' => $request->aoi
         ]);
-
         return response()->json(['data' => [$author, 'message' => 'Author Added successfully']], 201);
     }
+
     //update an author
     public function update(Request $request, $id) {
         $author = Author::findorfail($id);
